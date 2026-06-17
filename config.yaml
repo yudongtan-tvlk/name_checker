@@ -1,0 +1,42 @@
+# namecheck data-pipeline configuration.
+#
+# Only the countries listed here are processed by the data manager and scored
+# by the evaluation. name_dataset is read ONLY for these countries' CC files.
+enabled_countries:
+# - indonesia
+# - thailand
+  - korea
+  - japan
+  - vietnam
+#  - malaysia
+#  - singapore
+#  - philippines
+
+# true = run this loader. Fetch-sources prefer local raw under data/source/ and
+# fall back to their external origin (skip + warn if neither). Derived/mined/
+# generated stages recompute from upstream cache when on.
+sources:
+  names_dataset:  true   # data/source/name_dataset/data/<CC>.csv (freq = count)
+  wikidata:       true   # data/source/wikidata/wikidata_<country>.csv (freq = sitelinks)
+  wikidata_ko:    false  # KR: wikidata ko labels (C) -- redundant with the
+                         # syllable acceptor (A) and dilutes detection; off.
+                         # Flip true if A is removed or for broader given-name coverage.
+  jmnedict:       true   # data/source/JMnedict.xml -> japan (freq = count)
+  corrections:    true   # XLSX 'good' tab (freq = count; curated)
+  tvlk_bookings:  true   # data/source/tvlk_bookings.xlsx FLIGHT KR/JP/VN pax
+                         # (freq = booking count; NON-curated user input)
+  popular_names:  true   # sigpwned CSVs (freq = 1/listing; curated)
+  kr_given_names: true   # KR: curated romanized given-name list (B, manual)
+  aliases:        true   # 2a typo quarantine (derived from tokens)
+  syllables:      true   # 2b Vietnamese syllables (generated)
+  surnames:       true   # 1a curated surname lists (VN/KR)
+  confusions:     true   # 1b confusion priors (mined on 'good')
+  name_models:    true   # 1c name models (built on 'good')
+
+# Cap per-market dictionary to the most-frequent N tokens (+ all curated), so
+# the raw name_dataset tail stays tractable for indexing/quarantine/suggestion.
+max_tokens_per_market: 150000
+
+# Rebuild the cross-Asian regional fallback pool from name_dataset? Default off:
+# the migrated data/cache/regional/ cache is reused as-is.
+build_regional: false

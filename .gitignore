@@ -1,11 +1,18 @@
+# Raw input data — confidential PII (CS corrections, traveller bookings) and
+# large reproducible third-party dumps (names-dataset, JMnedict, wikidata).
+# Must NOT be pushed externally. data/cache/ (derived artifacts) is tracked.
+data/source/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
-
+.DS_Store
 # C extensions
 *.so
-
+.claude/
+tests/
+graphify-out/
 # Distribution / packaging
 .Python
 build/
